@@ -26,7 +26,7 @@ use std::collections::{BTreeSet, HashMap, HashSet};
 use std::time::Duration;
 use url::Url;
 
-pub struct Headers(HashMap<String, String>);
+pub struct Headers(pub HashMap<String, String>);
 
 // Which requestors to serve an SXG to.
 #[derive(Deserialize)]
@@ -43,7 +43,7 @@ pub enum AcceptFilter {
 const USER_AGENT: &str = "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.96 Mobile Safari/537.36";
 
 impl Headers {
-    pub(crate) fn new(data: HeaderFields, strip_headers: &BTreeSet<String>) -> Self {
+    pub fn new(data: HeaderFields, strip_headers: &BTreeSet<String>) -> Self {
         let mut headers = Headers(HashMap::new());
         for (mut k, v) in data {
             k.make_ascii_lowercase();
@@ -97,7 +97,7 @@ impl Headers {
         }
         Ok(new_headers.into_iter().collect())
     }
-    pub(crate) fn validate_as_sxg_payload(&self) -> Result<()> {
+    pub fn validate_as_sxg_payload(&self) -> Result<()> {
         for (k, v) in self.0.iter() {
             if DONT_SIGN_RESPONSE_HEADERS.contains(k.as_str()) {
                 return Err(anyhow!(r#"A stateful header "{}" is found."#, k));
