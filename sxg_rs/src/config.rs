@@ -19,7 +19,7 @@ use std::collections::BTreeSet;
 
 // This struct is source-of-truth of the sxg config. The user need to create
 // a file (like `config.yaml`) to provide this config input.
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Clone)]
 pub struct ConfigInput {
     pub cert_url_dirname: String,
     pub forward_request_headers: BTreeSet<String>,
@@ -40,7 +40,7 @@ pub struct ConfigInput {
 // This contains not only source-of-truth ConfigInput, but also a few more
 // attributes which are computed from ConfigInput.
 pub struct Config {
-    input: ConfigInput,
+    pub input: ConfigInput,
     pub cert_der: Vec<u8>,
     pub cert_sha256: Vec<u8>,
     pub issuer_der: Vec<u8>,

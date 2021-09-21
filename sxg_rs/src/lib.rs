@@ -43,7 +43,7 @@ use std::time::Duration;
 use url::Url;
 
 pub struct SxgWorker {
-    config: Config,
+    pub config: Config,
 }
 
 #[derive(Serialize, Debug, PartialEq)]
@@ -123,14 +123,13 @@ impl SxgWorker {
         let cert_url = cert_base
             .join(&format!(
                 "{}{}",
-                &self.config.cert_url_dirname,
-                &self.cert_basename()
+                &self.config.cert_url_dirname, "".to_string() // &self.cert_basename()
             ))
             .map_err(|e| Error::new(e).context("Failed to parse cert_url_dirname"))?;
         let validity_url = fallback_base
             .join(&format!(
                 "{}{}",
-                &self.config.validity_url_dirname, "validity"
+                &self.config.validity_url_dirname, "".to_string()
             ))
             .map_err(|e| Error::new(e).context("Failed to parse validity_url_dirname"))?;
         let date = now
