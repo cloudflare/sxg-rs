@@ -1,4 +1,4 @@
-// Copyright 2021 Google LLC
+// Copyright 2022 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,15 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// TODO(antiphoton) No longer allow unused_unit when a new version wasm_bindgen is released with
-// https://github.com/rustwasm/wasm-bindgen/pull/2778
-#![allow(clippy::unused_unit)]
+//! Helper functions for [#[serde(with)]](https://serde.rs/field-attrs.html#with).
+//!
+//! For example,
+//! ```
+//! use serde::{Serialize, Deserialize};
+//! #[derive(Serialize, Deserialize)]
+//! struct Container {
+//!     #[serde(with = "sxg_rs::serde_helpers::base64")]
+//!     value: Vec<u8>,
+//! }
+//! ```
+//! Rust value `Container { value: vec![1, 2, 3] }` will be serialized as JSON `{ "value": "AQID" }`.
 
-use wasm_bindgen::prelude::wasm_bindgen;
-
-extern crate sxg_rs;
-
-#[wasm_bindgen(js_name=init)]
-pub fn init() {
-    console_error_panic_hook::set_once()
-}
+pub mod base64;

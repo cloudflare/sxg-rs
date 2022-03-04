@@ -4,21 +4,27 @@
   "version": "0.1.0",
   "main": "dist/index.js",
   "scripts": {
-    "build": "rollup -c rollup.config.js",
-    "test": "karma start --single-run"
+    "build": "rollup -c --failAfterWarnings rollup.config.js",
+    "test": "karma start --single-run",
+    "lint": "gts lint"
   },
   "dependencies": {},
   "devDependencies": {
-    "@cloudflare/workers-types": "3.1.1",
-    "@rollup/plugin-typescript": "8.3.0",
-    "@types/jasmine": "3.10.2",
+    "@cloudflare/workers-types": "3.4.0",
+    "@rollup/plugin-typescript": "8.3.1",
+    "@types/jasmine": "3.10.3",
     "glob": "7.2.0",
-    "jasmine-core": "3.10.1",
-    "karma": "6.3.8",
+    "jasmine-core": "4.0.1",
+    "karma": "6.3.16",
     "karma-chrome-launcher": "3.1.0",
     "karma-jasmine": "4.0.1",
-    "rollup": "2.59.0",
+    "rollup": "2.68.0",
     "tslib": "2.3.1",
-    "typescript": "4.4.4"
+    "typescript": "4.5.5",
+    "gts": "^3.1.0",
+    "@types/node": "^14.11.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
 }

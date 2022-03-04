@@ -1,4 +1,4 @@
-// Copyright 2021 Google LLC
+// Copyright 2022 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,15 +12,4 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// TODO(antiphoton) No longer allow unused_unit when a new version wasm_bindgen is released with
-// https://github.com/rustwasm/wasm-bindgen/pull/2778
-#![allow(clippy::unused_unit)]
-
-use wasm_bindgen::prelude::wasm_bindgen;
-
-extern crate sxg_rs;
-
-#[wasm_bindgen(js_name=init)]
-pub fn init() {
-    console_error_panic_hook::set_once()
-}
+pub mod jws;
