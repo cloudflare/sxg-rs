@@ -14,13 +14,36 @@
  * limitations under the License.
  */
 
-import {
-  arrayBufferToBase64,
-} from './utils';
+import {arrayBufferToBase64, escapeLinkParamValue} from './utils';
 
 describe('arrayBufferToBase64', () => {
   it('works', () => {
     const a = new Uint8Array([1, 2, 3]);
     expect(arrayBufferToBase64(a.buffer)).toEqual('AQID');
   });
-})
+});
+
+describe('escapeLinkParamValue', () => {
+  it('returns tokens as-is', () => {
+    expect(escapeLinkParamValue('hello-world')).toEqual('hello-world');
+  });
+  it('quotes empty string', () => {
+    expect(escapeLinkParamValue('')).toEqual('""');
+  });
+  it('quotes non-tokens', () => {
+    expect(escapeLinkParamValue('hello world')).toEqual('"hello world"');
+  });
+  it('escapes "', () => {
+    expect(escapeLinkParamValue('hello, "world"')).toEqual(
+      String.raw`"hello, \"world\""`
+    );
+  });
+  it('escapes \\', () => {
+    expect(escapeLinkParamValue(String.raw`hello\world`)).toEqual(
+      String.raw`"hello\\world"`
+    );
+  });
+  it('returns null for non-representable strings', () => {
+    expect(escapeLinkParamValue('👋🌎')).toEqual(null);
+  });
+});

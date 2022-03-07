@@ -14,10 +14,7 @@
  * limitations under the License.
  */
 
-// This variable is added by the runtime of Cloudflare worker. It contains the
-// binary data of the wasm file.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare let wasm: any;
+// TODO(PR#157): Combine this file with `cloudflare_worker/worker/src/wasmFunctions.ts`.
 
 // `wrangler` uses `wasm-pack build --target no-modules` [^1] to build wasm.
 // When the target is `no-modules`, `wasm-bindgen` declares a global variable
@@ -57,7 +54,7 @@ export type PresetContent =
       fallback: WasmResponse;
     };
 
-interface WasmWorker {
+export interface WasmWorker {
   // eslint-disable-next-line @typescript-eslint/no-misused-new
   new (configYaml: string, certPem: string, issuerPem: string): WasmWorker;
   createRequestHeaders(
@@ -80,7 +77,7 @@ interface WasmWorker {
     fetcher: (request: WasmRequest) => Promise<WasmResponse>
   ): Uint8Array;
   getLastErrorMessage(): string;
-  servePresetContent(url: string, ocsp: Uint8Array): PresetContent | undefined;
+  servePresetContent(url: string, ocsp: string): PresetContent | undefined;
   shouldRespondDebugInfo(): boolean;
   validatePayloadHeaders(fields: HeaderFields): void;
 }
@@ -90,9 +87,14 @@ interface WasmFunctions {
   WasmWorker: WasmWorker;
 }
 
-export const workerPromise = (async function initWorker() {
-  await wasm_bindgen(wasm);
+export async function createWorker(
+  wasmBytes: Buffer,
+  configYaml: string,
+  certPem: string,
+  issuerPem: string
+) {
+  await wasm_bindgen(wasmBytes);
   const {init, WasmWorker} = wasm_bindgen as WasmFunctions;
   init();
-  return new WasmWorker(SXG_CONFIG, CERT_PEM, ISSUER_PEM);
-})();
+  return new WasmWorker(configYaml, certPem, issuerPem);
+}
